@@ -71,6 +71,15 @@ export function extractOriginalRecipient(input: {
     return "";
 }
 
+export function getStoredOriginalRecipient(input: {
+    address?: string;
+    source?: string;
+    rawEmail?: string;
+    headers?: Headers;
+}): string {
+    return extractOriginalRecipient(input) || normalizeEmailAddress(input.address || "");
+}
+
 function chooseCandidate(candidates: string[], deliveredAddress: string): string {
     for (const candidate of unique(candidates)) {
         const normalized = normalizeEmailAddress(candidate);

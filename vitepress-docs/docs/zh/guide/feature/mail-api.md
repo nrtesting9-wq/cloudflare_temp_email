@@ -45,7 +45,7 @@ response = requests.get(url, headers=headers, params=querystring)
 print(response.json())
 ```
 
-返回结果中可能包含 `original_recipient` 字段，表示系统从可信邮件头或转发痕迹中推断出的原始/转发前收件邮箱；无法可靠推断时该字段为空。`address` 仍表示 Worker 实际收到邮件时的投递邮箱。
+返回结果中可能包含 `original_recipient` 字段，表示系统从可信邮件头或转发痕迹中推断出的原始/转发前收件邮箱；无法可靠推断转发前收件邮箱时，会回填 Worker 实际收到邮件时的投递邮箱。`address` 仍表示 Worker 实际收到邮件时的投递邮箱。
 
 **注意**：`/admin/mails` 与 `/api/mails` 一致，返回的是邮件数据库中的 raw MIME 内容；如需正文/主题等可读字段，请在客户端自行解析 `raw`。
 

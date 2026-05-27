@@ -110,12 +110,12 @@ test.describe('Original recipient field', () => {
     expect(mail.original_recipient).toBe('fester-flaky-bats@duck.com');
   });
 
-  test('does not write address itself as original_recipient', async ({ request }) => {
+  test('falls back to delivered address when no forwarded recipient is inferred', async ({ request }) => {
     const { address, messageId } = await seedRawMail(request, {
-      subject: 'No Self Recipient',
+      subject: 'Delivered Address Fallback',
     });
 
     const mail = await getSeededAdminMail(request, address, messageId);
-    expect([null, '', undefined]).toContain(mail.original_recipient);
+    expect(mail.original_recipient).toBe(address);
   });
 });

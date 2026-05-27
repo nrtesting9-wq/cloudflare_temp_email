@@ -12,7 +12,7 @@ import { forwardEmail } from "./forward";
 import { EmailRuleSettings } from "../models";
 import { CONSTANTS } from "../constants";
 import { compressText } from "../gzip";
-import { extractOriginalRecipient } from "./original_recipient";
+import { getStoredOriginalRecipient } from "./original_recipient";
 import { insertRawMail } from "./raw_mail_storage";
 
 
@@ -66,7 +66,7 @@ async function email(message: ForwardableEmailMessage, env: Bindings, ctx: Execu
     }
 
     const message_id = message.headers.get("Message-ID");
-    const originalRecipient = extractOriginalRecipient({
+    const originalRecipient = getStoredOriginalRecipient({
         address: message.to,
         source: message.from,
         rawEmail: parsedEmailContext.rawEmail,

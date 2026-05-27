@@ -266,4 +266,27 @@ test.describe('Mail Gzip Storage', () => {
       await deleteGzipAddress(request, jwt);
     }
   });
+
+  test('gzip-compressed mail stores delivered address as original_recipient fallback', async ({ request }) => {
+    const { jwt, address } = await createGzipAddress(request, 'gzip-original-recipient-fallback');
+    try {
+      const messageId = await receiveGzipMail(request, address, {
+        subject: 'Gzip Original Recipient Fallback',
+        text: 'compressed original recipient fallback content',
+      });
+
+      const res = await request.get(
+        `${WORKER_GZIP_URL}/admin/mails?limit=10&offset=0&address=${encodeURIComponent(address)}`,
+      );
+      expect(res.ok()).toBe(true);
+      const { results } = await res.json();
+      const mail = results.find((item: any) => item.message_id === messageId);
+      expect(mail).toBeDefined();
+      expect(mail.original_recipient).toBe(address);
+      expect(mail.raw).toContain('Gzip Original Recipient Fallback');
+      expect(mail).not.toHaveProperty('raw_blob');
+    } finally {
+      await deleteGzipAddress(request, jwt);
+    }
+  });
 });

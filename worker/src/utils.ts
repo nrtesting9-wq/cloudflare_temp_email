@@ -3,7 +3,7 @@ import { createMimeMessage } from "mimetext";
 import { UserSettings, RoleAddressConfig } from "./models";
 import { CONSTANTS } from "./constants";
 import { compressText } from "./gzip";
-import { extractOriginalRecipient } from "./email/original_recipient";
+import { getStoredOriginalRecipient } from "./email/original_recipient";
 import { insertRawMail } from "./email/raw_mail_storage";
 
 export const getJsonObjectValue = <T = any>(
@@ -278,7 +278,7 @@ export const sendAdminInternalMail = async (
         });
         const message_id = Math.random().toString(36).substring(2, 15);
         const rawText = msg.asRaw();
-        const originalRecipient = extractOriginalRecipient({
+        const originalRecipient = getStoredOriginalRecipient({
             address: toMail,
             source: "admin@internal",
             rawEmail: rawText,

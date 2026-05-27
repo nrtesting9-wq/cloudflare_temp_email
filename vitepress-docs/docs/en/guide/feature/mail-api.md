@@ -45,7 +45,7 @@ response = requests.get(url, headers=headers, params=querystring)
 print(response.json())
 ```
 
-Results may include `original_recipient`, an inferred original/pre-forwarding recipient from trusted mail headers or forwarding traces. It is empty when no reliable value can be inferred. `address` still means the mailbox address actually delivered to the Worker.
+Results may include `original_recipient`, an inferred original/pre-forwarding recipient from trusted mail headers or forwarding traces. When no reliable forwarded recipient can be inferred, it falls back to the mailbox address actually delivered to the Worker. `address` still means the mailbox address actually delivered to the Worker.
 
 **Note**: `/admin/mails` follows the same design as `/api/mails`: it returns stored raw MIME data. If you need readable subject/body, parse the raw content on the client side.
 
